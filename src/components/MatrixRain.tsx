@@ -10,6 +10,7 @@ const MatrixRain = () => {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    // Función para establecer el tamaño del canvas
     const setCanvasSize = () => {
       if (canvas) {
         canvas.width = window.innerWidth
@@ -20,7 +21,7 @@ const MatrixRain = () => {
     setCanvasSize()
 
     const fontSize = 14
-    const columns = canvas.width / fontSize
+    const columns = Math.floor(canvas.width / fontSize)
     const drops: number[] = []
 
     for (let x = 0; x < columns; x++) {
@@ -33,8 +34,11 @@ const MatrixRain = () => {
     function draw() {
       if (!ctx || !canvas) return
       
+      const currentWidth = canvas.width
+      const currentHeight = canvas.height
+      
       ctx.fillStyle = 'rgba(17, 24, 39, 0.05)'
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      ctx.fillRect(0, 0, currentWidth, currentHeight)
 
       ctx.fillStyle = '#3b82f6'
       ctx.font = `${fontSize}px monospace`
@@ -43,7 +47,7 @@ const MatrixRain = () => {
         const text = chars[Math.floor(Math.random() * chars.length)]
         ctx.fillText(text, i * fontSize, drops[i] * fontSize)
 
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        if (drops[i] * fontSize > currentHeight && Math.random() > 0.975) {
           drops[i] = 0
         }
         drops[i]++
@@ -53,9 +57,10 @@ const MatrixRain = () => {
     const interval = setInterval(draw, 35)
 
     const handleResize = () => {
-      if (canvas) {
-        canvas.width = window.innerWidth
-        canvas.height = window.innerHeight
+      const currentCanvas = canvasRef.current
+      if (currentCanvas) {
+        currentCanvas.width = window.innerWidth
+        currentCanvas.height = window.innerHeight
       }
     }
 
@@ -77,4 +82,3 @@ const MatrixRain = () => {
 }
 
 export default MatrixRain
-
