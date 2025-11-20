@@ -10,8 +10,14 @@ const MatrixRain = () => {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
+    const setCanvasSize = () => {
+      if (canvas) {
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+      }
+    }
+
+    setCanvasSize()
 
     const fontSize = 14
     const columns = canvas.width / fontSize
@@ -25,7 +31,7 @@ const MatrixRain = () => {
     const chars = characters.split('')
 
     function draw() {
-      if (!ctx) return
+      if (!ctx || !canvas) return
       
       ctx.fillStyle = 'rgba(17, 24, 39, 0.05)'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -47,8 +53,10 @@ const MatrixRain = () => {
     const interval = setInterval(draw, 35)
 
     const handleResize = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
+      if (canvas) {
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+      }
     }
 
     window.addEventListener('resize', handleResize)
