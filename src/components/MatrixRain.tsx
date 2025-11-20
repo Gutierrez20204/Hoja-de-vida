@@ -10,18 +10,15 @@ const MatrixRain = () => {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    // Función para establecer el tamaño del canvas
-    const setCanvasSize = () => {
-      if (canvas) {
-        canvas.width = window.innerWidth
-        canvas.height = window.innerHeight
-      }
-    }
-
-    setCanvasSize()
+    // Guardar dimensiones iniciales
+    let canvasWidth = window.innerWidth
+    let canvasHeight = window.innerHeight
+    
+    canvas.width = canvasWidth
+    canvas.height = canvasHeight
 
     const fontSize = 14
-    const columns = Math.floor(canvas.width / fontSize)
+    const columns = Math.floor(canvasWidth / fontSize)
     const drops: number[] = []
 
     for (let x = 0; x < columns; x++) {
@@ -32,13 +29,11 @@ const MatrixRain = () => {
     const chars = characters.split('')
 
     function draw() {
-      if (!ctx || !canvas) return
-      
-      const currentWidth = canvas.width
-      const currentHeight = canvas.height
+      const currentCanvas = canvasRef.current
+      if (!ctx || !currentCanvas) return
       
       ctx.fillStyle = 'rgba(17, 24, 39, 0.05)'
-      ctx.fillRect(0, 0, currentWidth, currentHeight)
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight)
 
       ctx.fillStyle = '#3b82f6'
       ctx.font = `${fontSize}px monospace`
@@ -47,7 +42,7 @@ const MatrixRain = () => {
         const text = chars[Math.floor(Math.random() * chars.length)]
         ctx.fillText(text, i * fontSize, drops[i] * fontSize)
 
-        if (drops[i] * fontSize > currentHeight && Math.random() > 0.975) {
+        if (drops[i] * fontSize > canvasHeight && Math.random() > 0.975) {
           drops[i] = 0
         }
         drops[i]++
@@ -59,8 +54,10 @@ const MatrixRain = () => {
     const handleResize = () => {
       const currentCanvas = canvasRef.current
       if (currentCanvas) {
-        currentCanvas.width = window.innerWidth
-        currentCanvas.height = window.innerHeight
+        canvasWidth = window.innerWidth
+        canvasHeight = window.innerHeight
+        currentCanvas.width = canvasWidth
+        currentCanvas.height = canvasHeight
       }
     }
 
